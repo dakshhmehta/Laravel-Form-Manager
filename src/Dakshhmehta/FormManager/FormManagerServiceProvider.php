@@ -1,7 +1,6 @@
 <?php namespace Dakshhmehta\FormManager;
 
 use Illuminate\Support\ServiceProvider;
-use Form;
 
 class FormManagerServiceProvider extends ServiceProvider {
 
@@ -30,10 +29,11 @@ class FormManagerServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		//
-		$this->app['form.manager'] = $this->app->share(function($app){
-		    return new Manager('container', $this->app->make('form'));
-		});
 
+		\App::singleton('form-manager', function()
+		{
+		    return new FormManager('container', $this->app->make('form'));
+		});
 	}
 
 	/**

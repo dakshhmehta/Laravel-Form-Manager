@@ -6,10 +6,11 @@ use Request;
 use URL;
 use Config;
 
-class Manager {
+class FormManager {
 	private $fields = array();
 	private $forms = array();
 	private $name;
+	private $slug;
 	private $action;
 	private $method;
 	private $attributes = array();
@@ -17,14 +18,15 @@ class Manager {
 
 	public function __construct($name = 'container', FormBuilder $builder){
 		$this->name = $name;
+		$this->slug = str_replace(' ', '_', $name);
 		$this->action = URL::to(Request::path());
 		$this->method = 'POST';
 		self::$builder = $builder;
 	}
 
-	public function form($key = 'main'){
+	public function make($key = 'main'){
 		if(! isset($this->forms[$key])){
-			$this->forms[$key] = new Manager($key, self::$builder);
+			$this->forms[$key] = new FormManager($key, self::$builder);
 		}
 
 		return $this->forms[$key];
@@ -64,6 +66,7 @@ class Manager {
 		$output = array();
 
 		$output['name'] = $this->name;
+		$output['slug'] = $this->slug;
 		$output['action'] = $this->action;
 		$output['method'] = $this->method;
 		$output['forms'] = array();
